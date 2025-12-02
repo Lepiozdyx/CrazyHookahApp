@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var manager = StateManager()
-    @StateObject private var store = CrazyHookahStore()
         
     var body: some View {
         Group {
@@ -25,7 +24,6 @@ struct ContentView: View {
                 
             case .loading:
                 CrazyHookahRootView()
-                    .environmentObject(store)
                     .preferredColorScheme(.dark)
             }
         }

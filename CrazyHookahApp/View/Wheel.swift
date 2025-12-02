@@ -6,6 +6,7 @@ struct WheelScreen: View {
     private let wheelImageName = "wheel"
     private let pointerImageName = "wheel_pointer"
     private let backgroundImageName = "loadingBack"
+    private let tabBarHeight: CGFloat = 94
     
     @State private var glowScale: CGFloat = 1.0
     @State private var glowOpacity: Double = 0.6
@@ -41,6 +42,7 @@ struct WheelScreen: View {
                 
                 VStack {
                     Spacer()
+                    
                     if isSaveSheetPresented {
                         SaveCancelSheetView(
                             onSave: {
@@ -66,10 +68,11 @@ struct WheelScreen: View {
                             }
                         )
                         .frame(height: geo.size.height * 0.4)
+                        // Поднимаем шторку ровно над таббаром
+                        .padding(.bottom, tabBarHeight)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                 }
-                .ignoresSafeArea(edges: .bottom)
                 
                 if isRatingOverlayPresented, let mix = store.currentMix {
                     RatingOverlayView(
@@ -217,21 +220,6 @@ struct WheelScreen: View {
                         )
                     )
                     .disabled(!canSpinMore)
-                    
-                    if !store.isSpinning && !store.archivedMixes.isEmpty  {
-                        Button {
-                            store.openArchive()
-                            store.isArchiveActive = true
-                        } label: {
-                            Text("ARCHIVE")
-                                .font(.system(size: 20, weight: .heavy))
-                                .kerning(1.5)
-                                .foregroundColor(.white)
-                        }
-                        .buttonStyle(
-                            RaisedYellowButtonStyle(isDisabled: false)
-                        )
-                    }
                 }
             }
         }
@@ -427,7 +415,7 @@ struct MixProfileSummaryView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Color(red: 0.90, green: 0.20, blue: 0.20), lineWidth: 2)
+                    .stroke(Color(red: 0.90, green: 0.20, blue: 0.2), lineWidth: 2)
                     .background(
                         RoundedRectangle(cornerRadius: 18, style: .continuous)
                             .fill(Color.white.opacity(0.18))
@@ -465,7 +453,6 @@ struct SaveCancelSheetView: View {
                     )
                 )
                 .shadow(color: Color.black.opacity(0.6), radius: 16, x: 0, y: -4)
-                .ignoresSafeArea(edges: .bottom)
             
             VStack(spacing: 20) {
                 Spacer()
@@ -569,8 +556,6 @@ struct RatingOverlayView: View {
         }
     }
 }
-
-
 
 #Preview {
     WheelScreen()
